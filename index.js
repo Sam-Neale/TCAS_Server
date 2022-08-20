@@ -15,16 +15,6 @@ app.listen(8080, ()=>{
 
 //App
 app.post("/tcasIN", async (req,res)=>{
-    const options = {
-        method: 'GET',
-        url: 'https://iftracker.net/tcasIN',
-        headers: { 'Content-Type': 'application/json' }
-    };
-
-    request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        console.log(body);
-    });
+    console.log(req.body)
     res.sendStatus(200);
 })
