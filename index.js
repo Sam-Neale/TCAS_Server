@@ -35,7 +35,6 @@ main()
 async function checkForFlight(id, collection) {
     return new Promise(async (resolve, reject) => {
         const filteredDocs = await collection.find({ id }).toArray();
-        console.log(filteredDocs)
         resolve(filteredDocs.length == 0 ? null: filteredDocs[0]);
     })
 }
@@ -87,7 +86,6 @@ app.get("/tcasOUT", async (req, res) => {
         const docs = await (getServerCollection(req.query.server)).find({}).toArray();
         const filteredDocs = [];
         docs.forEach(doc => {
-            console.log(doc);
             delete doc['_id'];
             filteredDocs.push(doc);
         })
@@ -130,7 +128,6 @@ function refreshOnlineFlights(){
 
         if(response.statusCode == 200){
             const data = JSON.parse(body);
-            console.log(data);
             
             data.result.forEach(async aircraft =>{
                 const data = {
@@ -144,7 +141,7 @@ function refreshOnlineFlights(){
                     },
                     airspeed: aircraft.speed,
                     track: aircraft.track,
-                    isGrounded: aircraft.speed > 100,
+                    isGrounded: aircraft.airspeed > 100,
                     vs: aircraft.verticalSpeed,
                     ts: new Date().getTime(),
                     manual: false
@@ -185,7 +182,7 @@ function refreshOnlineFlights(){
                     },
                     airspeed: aircraft.speed,
                     track: aircraft.track,
-                    isGrounded: aircraft.speed > 100,
+                    isGrounded: aircraft.airspeed > 100,
                     vs: aircraft.verticalSpeed,
                     ts: new Date().getTime(),
                     manual: false
@@ -226,7 +223,7 @@ function refreshOnlineFlights(){
                     },
                     airspeed: aircraft.speed,
                     track: aircraft.track,
-                    isGrounded: aircraft.speed > 100,
+                    isGrounded: aircraft.airspeed > 100,
                     vs: aircraft.verticalSpeed,
                     ts: new Date().getTime(),
                     manual: false
