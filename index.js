@@ -16,7 +16,9 @@ const client = new MongoClient(url);
 const dbName = 'TCAS';
 const dbObjects = {
     db: null,
-    collection: null
+    expertCollection: null,
+    trainingCollection: null,
+    casualCollection: null
 };
 
 async function main() {
@@ -24,13 +26,15 @@ async function main() {
     await client.connect();
     console.log('Connected successfully to server');
     dbObjects.db = client.db(dbName);
-    dbObjects.collection = dbObjects.db.collection('TCAS-DATA');
+    dbObjects.expertCollection = dbObjects.db.collection('TCAS-EXPERT');
+    dbObjects.trainingCollection = dbObjects.db.collection('TCAS-TRAINING');
+    dbObjects.casualCollection = dbObjects.db.collection('TCAS-CASUAL');
 }
 main()
 
-async function checkForFlight(id) {
+async function checkForFlight(id, collection) {
     return new Promise(async (resolve, reject) => {
-        const filteredDocs = await dbObjects.collection.find({ id }).toArray();
+        const filteredDocs = await collection.find({ id }).toArray();
         console.log(filteredDocs)
         resolve(filteredDocs.length == 0 ? null: filteredDocs[0]);
     })
@@ -61,13 +65,13 @@ app.post("/tcasIN", async (req,res)=>{
             course: req.body.course,
             isGrounded: req.body.isGrounded
         }
-        if(await checkForFlight(data.id) == null){
+        if(await checkForFlight(data.id, getServerCollection(req.body.live.server)) == null){
             console.log("Found no flight, creating.")
-            const insertResult = await dbObjects.collection.insertOne(data);
+            const insertResult = await (getServerCollection(req.body.live.server)).insertOne(data);
             res.sendStatus(200);
         }else{
             console.log("Found flight, updating.")
-            const updateResult = await dbObjects.collection.updateOne({ id: data.id }, { $set: data });
+            const updateResult = await (getServerCollection(req.body.live.server)).updateOne({ id: data.id }, { $set: data });
             res.sendStatus(200);
         }
     }else{
@@ -76,13 +80,33 @@ app.post("/tcasIN", async (req,res)=>{
 });
 
 app.get("/tcasOUT", async (req, res) => {
-    const docs = await dbObjects.collection.find({}).toArray();
-    const filteredDocs = [];
-    docs.forEach(doc =>{
-        console.log(doc);
-        delete doc['_id'];
-        filteredDocs.push(doc);
-    })
-    res.status(200);
-    res.json(filteredDocs);
+    if(req.query.server){
+        const docs = await (getServerCollection(req.query.server)).find({}).toArray();
+        const filteredDocs = [];
+        docs.forEach(doc => {
+            console.log(doc);
+            delete doc['_id'];
+            filteredDocs.push(doc);
+        })
+        res.status(200);
+        res.json(filteredDocs);
+    }else{
+        res.sendStatus(400);
+    }
+    
 })
+
+function getServerCollection(id){
+    switch(id){
+        case "6a04ffe8-765a-4925-af26-d88029eeadba":
+            return dbObjects.trainingCollection;
+            break;
+        case "7e5dcd44-1fb5-49cc-bc2c-a9aab1f6a856":
+            return dbObjects.expertCollection;
+            break;
+        case "d01006e4-3114-473c-8f69-020b89d02884":
+            return dbObjects.casualCollection;
+            break;
+        default: null;
+    }
+}
