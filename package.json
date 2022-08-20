@@ -1,0 +1,22 @@
+{
+  "name": "tcas-server",
+  "version": "1.0.0",
+  "description": "Server side for the IFTCAS system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sam-Neale/TCAS_Server.git"
+  },
+  "keywords": [
+    "TCAS"
+  ],
+  "author": "Sam Neale",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sam-Neale/TCAS_Server/issues"
+  },
+  "homepage": "https://github.com/Sam-Neale/TCAS_Server#readme"
+}
