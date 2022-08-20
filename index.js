@@ -75,9 +75,10 @@ app.post("/tcasIN", async (req,res)=>{
 });
 
 app.get("/tcasOUT", async (req, res) => {
-    const docs = await dbObjects.collection.findMany({}).toArray();
+    const docs = await dbObjects.collection.find({}).toArray();
     const filteredDocs = [];
-    filteredDocs.forEach(doc =>{
+    docs.forEach(doc =>{
+        console.log(doc);
         delete doc['_id'];
         filteredDocs.push(doc);
     })
