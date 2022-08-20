@@ -130,6 +130,7 @@ function refreshOnlineFlights(){
 
         if(response.statusCode == 200){
             const data = JSON.parse(body);
+            console.log(data);
             
             data.result.forEach(async aircraft =>{
                 const data = {
@@ -268,3 +269,4 @@ async function checkOutdatedFlights(){
         }
     })
 }
+setInterval(checkOutdatedFlights, 1000 * 60);
