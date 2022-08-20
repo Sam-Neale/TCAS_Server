@@ -60,7 +60,7 @@ app.post("/tcasIN", async (req,res)=>{
             course: req.body.course
         }
         if(await checkForFlight(data.id) == null){
-            const insertResult = await dbObjects.collection.insert(data);
+            const insertResult = await dbObjects.collection.insertOne(data);
             res.sendStatus(200);
         }else{
             const updateResult = await dbObjects.collection.updateOne({ id: data.id }, { $set: data });
