@@ -131,7 +131,7 @@ function refreshOnlineFlights(){
         if(response.statusCode == 200){
             const data = JSON.parse(body);
             
-            data.forEach(async aircraft =>{
+            data.result.forEach(async aircraft =>{
                 const data = {
                     id: `${aircraft.flightId}-d01006e4-3114-473c-8f69-020b89d02884`,
                     x: aircraft.longitude,
@@ -172,7 +172,7 @@ function refreshOnlineFlights(){
         if (response.statusCode == 200) {
             const data = JSON.parse(body);
 
-            data.forEach(async aircraft => {
+            data.result.forEach(async aircraft => {
                 const data = {
                     id: `${aircraft.flightId} 6a04ffe8-765a-4925-af26-d88029eeadba`,
                     x: aircraft.longitude,
@@ -213,7 +213,7 @@ function refreshOnlineFlights(){
         if (response.statusCode == 200) {
             const data = JSON.parse(body);
 
-            data.forEach(async aircraft => {
+            data.result.forEach(async aircraft => {
                 const data = {
                     id: `${aircraft.flightId} 7e5dcd44-1fb5-49cc-bc2c-a9aab1f6a856`,
                     x: aircraft.longitude,
@@ -255,14 +255,14 @@ async function checkOutdatedFlights(){
     })
     //Training
     const trainingFlights = await (getServerCollection(2)).find({}).toArray();
-    casualFlights.forEach(flight => {
+    trainingFlights.forEach(flight => {
         if (new Date().getTime() - flight.ts > 1000 * 60 * 10) {
             (getServerCollection(2)).deleteMany({ id: flight.id });
         }
     })
     //Expert
     const expertFlights = await (getServerCollection(3)).find({}).toArray();
-    casualFlights.forEach(flight => {
+    expertFlights.forEach(flight => {
         if (new Date().getTime() - flight.ts > 1000 * 60 * 10) {
             (getServerCollection(3)).deleteMany({ id: flight.id });
         }
