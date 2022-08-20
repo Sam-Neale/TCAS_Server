@@ -45,6 +45,7 @@ app.listen(8080, ()=>{
 
 //App
 app.post("/tcasIN", async (req,res)=>{
+    console.log(req.body);
     if(req.body.x && req.body.y && req.body.z && req.body.live && req.body.live.flight && req.body.live.server && req.body.groundSpeed && req.body.course){
         const data = {
             id: `${req.body.live.flight}-${req.body.live.server}`,
@@ -68,6 +69,4 @@ app.post("/tcasIN", async (req,res)=>{
     }else{
         res.sendStatus(400);
     }
-    console.log(req.body)
-    res.sendStatus(200);
 })
