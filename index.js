@@ -241,7 +241,7 @@ function refreshOnlineFlights(){
     });
 }
 
-setInterval(refreshOnlineFlights, 5000);
+setInterval(refreshOnlineFlights, 2000);
 
 async function checkOutdatedFlights(){
     //Casual
