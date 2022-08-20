@@ -58,7 +58,8 @@ app.post("/tcasIN", async (req,res)=>{
                 serverID: req.body.live.server,
             },
             groundSpeed: req.body.groundSpeed,
-            course: req.body.course
+            course: req.body.course,
+            isGrounded: req.body.isGrounded
         }
         if(await checkForFlight(data.id) == null){
             console.log("Found no flight, creating.")
