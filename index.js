@@ -115,7 +115,7 @@ function getServerCollection(id){
     }
 }
 
-function refreshOnlineFlights(){
+async function refreshOnlineFlights(){
     //Casual
     const options = {
         method: 'GET',
