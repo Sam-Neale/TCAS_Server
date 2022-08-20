@@ -31,6 +31,7 @@ main()
 async function checkForFlight(id) {
     return new Promise(async (resolve, reject) => {
         const filteredDocs = await dbObjects.collection.find({ id }).toArray();
+        console.log(filteredDocs)
         resolve(filteredDocs.length == 0 ? null: filteredDocs[0]);
     })
 }
@@ -60,9 +61,11 @@ app.post("/tcasIN", async (req,res)=>{
             course: req.body.course
         }
         if(await checkForFlight(data.id) == null){
+            console.log("Found no flight, creating.")
             const insertResult = await dbObjects.collection.insertOne(data);
             res.sendStatus(200);
         }else{
+            console.log("Found flight, updating.")
             const updateResult = await dbObjects.collection.updateOne({ id: data.id }, { $set: data });
             res.sendStatus(200);
         }
